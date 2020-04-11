@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Axon Cam By RCPisAwesome</title>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
+	<link rel="stylesheet" href="https://use.typekit.net/fpa1hmo.css">
+	<script>
+		var audioPlayer = new Howl({src: ["https://www.rcpisawesome.co.uk/dev/FiveMRCPAxon/beep.wav"]});
+		audioPlayer.volume(0.1);
+		var serial = Math.random().toString().substr(2, 8);//8 = length
+		updateClock();
+		function updateClock() {
+			var utc = new Date().toISOString();
+			var date = utc.substring(0, 10);
+			var time = utc.substring(10, 19);
+			$("#date").text(date+" "+time+"Z");
+			setTimeout(updateClock, 1000);
+		}
+		$(function() {
+			window.addEventListener('message', function(event) {
+				$("body").css('display', event.data.ShowUI ? "block" : "none");
+				if (event.data.ShowUI){
+					audioPlayer.play();
+				}
+				if (event.data.Volume){
+					audioPlayer.volume(event.data.Volume);
+					audioPlayer.play();
+				}
+			})
+			$("#text").text("AXON BODY 2 X"+serial);
+		})
+	</script>
+	<style>
+		body{
+			overflow: hidden;
+			display: none;
+		}
+		p{
+			color: rgb(255,255,255);
+			font-size: 1.2vw;
+			text-shadow:
+			0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black,
+			0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black,
+			0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black;
+			font-family: motor, monospace;
+			font-weight: 700;
+			font-style: normal;
+		}
+		div{
+			left: 82%;
+			position: absolute;
+		}
+		#datediv{
+			top: 3.5%;
+		}
+		#textdiv{
+			top: 6.5%;
+		}
+		#logo{
+			top: 1%;
+			left: 92%;
+			width: 10%;
+			height: 15%;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="datediv">
+		<p id="date" class="stretch">2020-01-01 T00:00:00Z</p>
+	</div>
+	<div id="textdiv">
+		<p id="text" class="stretch">AXON BODY 2 X00000000</p>
+	</div>
+	<img id="logo" src="https://secure.meetupstatic.com/photos/member/b/1/b/4/highres_293145492.jpeg" alt="Logo">
+</body>
+</html>
