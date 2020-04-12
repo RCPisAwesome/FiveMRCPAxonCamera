@@ -7,26 +7,89 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js"></script>
 	<link rel="stylesheet" href="https://use.typekit.net/fpa1hmo.css">
 	<script>
+		Date.prototype.stdTimezoneOffset = function () {
+		    var jan = new Date(this.getFullYear(), 0, 1);
+		    var jul = new Date(this.getFullYear(), 6, 1);
+		    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+		}
+		
+		Date.prototype.isDstObserved = function () {
+		    return this.getTimezoneOffset() < this.stdTimezoneOffset();
+		}
+
 		var audioPlayer = new Howl({src: ["https://www.rcpisawesome.co.uk/dev/FiveMRCPAxon/beep.wav"]});
 		audioPlayer.volume(0.1);
+		var offset = 0;
+		var setoffset = 0;
+		var utc = true;
 		var serial = Math.random().toString().substr(2, 8);//8 = length
 		updateClock();
+
 		function updateClock() {
-			var utc = new Date().toISOString();
-			var date = utc.substring(0, 10);
-			var time = utc.substring(10, 19);
-			$("#date").text(date+" "+time+"Z");
+			if (utc == true){
+				var timedate = new Date();
+				var nato = "Z"
+			}else if (utc == false){
+				var today = new Date();
+				today.setTime(today.getTime()+today.getTimezoneOffset()*60*1000);
+				if (today.isDstObserved()) { 
+					//daylight savings in on
+					setoffset = offset + 1
+				}else{
+					setoffset = offset
+				}
+					  if (setoffset == 1){var nato = "A";
+				}else if (setoffset == 2){var nato = "B";
+				}else if (setoffset == 3){var nato = "C";
+				}else if (setoffset == 4){var nato = "D";
+				}else if (setoffset == 5){var nato = "E";
+				}else if (setoffset == 6){var nato = "F";
+				}else if (setoffset == 7){var nato = "G";
+				}else if (setoffset == 8){var nato = "H";
+				}else if (setoffset == 9){var nato = "I";
+				}else if (setoffset == 10){var nato = "K";
+				}else if (setoffset == 11){var nato = "L";
+				}else if (setoffset == 12){var nato = "M";
+				}else if (setoffset == -1){var nato = "N";
+				}else if (setoffset == -2){var nato = "O";
+				}else if (setoffset == -3){var nato = "P";
+				}else if (setoffset == -4){var nato = "Q";
+				}else if (setoffset == -5){var nato = "R";
+				}else if (setoffset == -6){var nato = "S";
+				}else if (setoffset == -7){var nato = "T";
+				}else if (setoffset == -8){var nato = "U";
+				}else if (setoffset == -9){var nato = "V";
+				}else if (setoffset == -10){var nato = "W";
+				}else if (setoffset == -11){var nato = "X";
+				}else if (setoffset == -12){var nato = "Y";
+				}else{var nato = "Z";
+				}
+				var timedate = new Date(today.getTime()+(setoffset*60*60*1000));//milliseconds to seconds to minutes to hours
+			}
+
+			var newtoday = timedate.toISOString();
+			var date = newtoday.substring(0, 10);
+			var time = newtoday.substring(10, 19);
+			$("#date").text(date+" "+time+nato);
 			setTimeout(updateClock, 1000);
 		}
 		$(function() {
 			window.addEventListener('message', function(event) {
 				$("body").css('display', event.data.ShowUI ? "block" : "none");
+				$("svg").css('display', event.data.ShowBox ? "block" : "none");
 				if (event.data.ShowUI){
 					audioPlayer.play();
 				}
 				if (event.data.Volume){
 					audioPlayer.volume(event.data.Volume);
 					audioPlayer.play();
+				}
+				if (event.data.Offsetsend){
+					utc = false;
+					offset = event.data.Offset;
+				}
+				if (event.data.UTC){
+					utc = true;
 				}
 			})
 			$("#text").text("AXON BODY 2 X"+serial);
@@ -62,6 +125,19 @@
 			height: 15%;
 			position: absolute;
 		}
+		svg{
+			top: 5%;
+			left: 81.5%;
+			width: 18%;
+			height: 7.5%;
+			position: absolute;
+			z-index: -1;
+		}
+		rect{
+			fill:rgb(40,40,40);
+			width: 100%;
+			height: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -72,5 +148,8 @@
 		<p id="text" class="stretch">AXON BODY 2 X00000000</p>
 	</div>
 	<img id="logo" src="https://secure.meetupstatic.com/photos/member/b/1/b/4/highres_293145492.jpeg" alt="Logo">
+	<svg>
+  		<rect/>
+	</svg>
 </body>
 </html>
