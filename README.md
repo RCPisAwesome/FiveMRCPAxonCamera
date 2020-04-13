@@ -15,7 +15,6 @@ coming soon
 - Doing "/rcpaxonallowthirdperson" in the Fivem chat toggles if the UI shows in all views or first person only
 - Doing "/rcpaxonvolume" in the Fivem chat changes the loudness of the beeps, minimum is 0.01 and maximum is 1.0
 - Doing "/rcpaxontimeoffset" in the Fivem chat changes the offset in military hours compared to UTC time without daylight savings. Minimum is -12 and maximum is +12. Doing "/rcpaxontimeoffset utc" resets it back to UTC
-- Beep and overlay appear when in first person
 # Installation:
 1. Make a folder called rcpaxoncamera in your resources folder of your server (it has to be lower case)
 2. Clone or download the files to that folder
