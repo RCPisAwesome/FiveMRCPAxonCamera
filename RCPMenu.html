@@ -13,13 +13,12 @@
 		    var jul = new Date(this.getFullYear(), 6, 1);
 		    return Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
 		}
-		
 		Date.prototype.isDstObserved = function () {
 		    return this.getTimezoneOffset() < this.stdTimezoneOffset();
 		}
 		var beep = new Howl({src: ["https://www.rcpisawesome.co.uk/dev/FiveMRCPAxonCamera/beep.wav"]});
 		beep.volume(0.01);
-		var enabled = false;
+		var enabled = "false";
 		var nato = "Z";
 		var offset = 0;
 		var setoffset = 0;
@@ -35,25 +34,20 @@
 			}else if (utc == false){
 				var today = new Date();
 				today.setTime(today.getTime()+today.getTimezoneOffset()*60*1000);
-
 				if ((daylightsavings == "YES") && (today.isDstObserved())){ 
-					//daylight savings in on
-					setoffset = offset + 1;
+					setoffset = offset + 1; //daylight savings in on
 				}else{
 					setoffset = offset;
 				}
 				var timedate = new Date(today.getTime()+(setoffset*60*60*1000));//milliseconds to seconds to minutes to hours
-
 				var nato = $(".timezone[title='"+offset+"']").attr("name").toString();
 			}
-
 			var newtoday = timedate.toISOString();
 			var date = newtoday.substring(0, 10);
 			var time = newtoday.substring(10, 19);
 			$("#date").text(date+" "+time+nato);
 			setTimeout(updateClock, 1000);
 		}
-
 		function volumeChange(vol) {
 			if (!vol == "0"){
 				beep.volume(vol/100);
@@ -64,19 +58,21 @@
 			var location = window.location.href;
 			var directoryPath = location.substring(6, location.lastIndexOf("/")+1);
 			window.addEventListener('message', function(event) {
-				if (enabled){
+				if (enabled == "true"){
 					$("#ui").css('display', event.data.ShowUI ? "block" : "none");
 					if (event.data.ShowUI){
 						beep.play();
 					}
 				}
-				$("#togglepower").css('display', event.data.ShowPowerButton ? "block" : "none");
+				if (event.data.ShowPowerButton){
+					enabled = "false";
+					$("#togglepower").css('display', event.data.ShowPowerButton ? "block" : "none");
+				}
 			})
 			$(window).keydown(function(e){
-				/*0123456789,numpad 0123456789,enter,backspace,delete*/
 				if (!((e.keyCode==48)||(e.keyCode==49)||(e.keyCode==50)||(e.keyCode==51)||(e.keyCode==52)||(e.keyCode==53)||(e.keyCode==54)||(e.keyCode==55)||(e.keyCode==56)||(e.keyCode==57)||
 					(e.keyCode==96)||(e.keyCode==97)||(e.keyCode==98)||(e.keyCode==99)||(e.keyCode==100)||(e.keyCode==101)||(e.keyCode==102)||(e.keyCode==103)||(e.keyCode==104)||(e.keyCode==105)||
-					(e.keyCode==13)||(e.keyCode==8)||(e.keyCode==46))){
+					(e.keyCode==13)||(e.keyCode==8)||(e.keyCode==46))){/*0123456789,numpad 0123456789,enter,backspace,delete*/
 					$.post("http://"+directoryPath+"close");
 					$(".toggle").hide();
 					$(".timezone").hide();
@@ -85,7 +81,6 @@
 				}
 			})
 			$("#text").text("AXON BODY 2 X"+serial);
-
 			$('#volume').on("input propertychange change click",function(){
 				var vol = $(this).val().toString();
 				$("#volumeinput").val(vol);
@@ -98,9 +93,14 @@
 			})
 			$("button").click(function(){
 				if (this.id == "togglepower"){
-					enabled = !(enabled);
+					if (enabled == "false"){
+						enabled = "true";
+						$("#ui").show();
+					}else{
+						enabled = "false";
+						$("#ui").hide();
+					}
 					$(".toggle").show();
-					$("#ui").toggle();
 				}else if (this.id == "toggletimeoffest"){
 					$(".volume").hide();
 					$(".daylightsavings").show();
@@ -218,7 +218,6 @@
 		}
 		#daylightsavings{
 			display: none;
-			position: absolute;
 			top: 15vw;
 			left: 80vw;
 			width: 20vw;
