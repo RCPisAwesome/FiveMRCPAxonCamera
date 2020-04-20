@@ -12,8 +12,6 @@ Axon body camera overlay for FiveM, the multiplayer mod for GTAV!
 
 # Video:
 [![Axon](https://img.youtube.com/vi/cP7MPmqDS5k/maxresdefault.jpg)](https://www.youtube.com/watch?v=cP7MPmqDS5k)
-# Patreon:
-[![patreon](https://c5.patreon.com/external/favicon/favicon.ico)](https://www.patreon.com/RCPisAwesome)     For early access to scripts and videos and other rewards, support me on my Patreon page!
 # Features:
 - Doing "/rcpaxon" in the Fivem chat when in first person bring up the power button to turn on the overlay
 - Can toggle a box behind the text and logo for easier reading
