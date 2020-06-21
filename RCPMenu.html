@@ -19,7 +19,13 @@
 		var beep = new Howl({src: ["https://www.rcpisawesome.co.uk/dev/FiveMRCPAxonCamera/beep.wav"]});
 		beep.volume(0.01);
 		var togglevolume = true,togglebackground = true,togglethirdperson = true,togglepower = true,toggletimeoffest = true,toggle2minbeeps = true,twominbeep = true,toggleweapon = false,uienabled = false;
-		var offset = 0, setoffset = 0, utc = true, daylightsavings = "YES", serial = Math.random().toString().substr(2, 8);//8 = length
+		var offset = 0, setoffset = 0, utc = true, daylightsavings = "YES";
+		var s = "";
+		var keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		for ( var i = 0; i < 4; i++ ) {
+		   s += keys.charAt(Math.floor(Math.random() * (keys.length)));
+		}
+		var serial = "6039"+s;
 		updateClock();
 
 		function updateClock() {
@@ -78,7 +84,7 @@
 				}
 			});
 			$(window).keydown(function(e){
-				if (!(((e.keyCode >= 48)&&(e.keyCode <= 57))||((e.keyCode >= 96)&&(e.keyCode <= 105))||(e.keyCode==13)||(e.keyCode==8)||(e.keyCode==46)||(e.keyCode==123))){/*0123456789,numpad 0123456789,enter,backspace,delete*/
+				if (!(((e.keyCode >= 48)&&(e.keyCode <= 57))||((e.keyCode >= 96)&&(e.keyCode <= 105))||(e.keyCode==13)||(e.keyCode==8)||(e.keyCode==46))){/*0123456789,numpad 0123456789,enter,backspace,delete*/
 					$.post("http://"+directoryPath+"close");
 					$(".toggle").hide();
 					$(".timezone").hide();
@@ -349,7 +355,7 @@
 <body>
 	<div id="ui">
 		<p id="date">2020-01-01 T00:00:00 +0000</p>
-		<p id="text">AXON BODY 3 X00000000</p>
+		<p id="text">AXON BODY 3 X60390000</p>
 		<img id="logo" src="https://www.rcpisawesome.co.uk/dev/FiveMRCPAxonCamera/axon.png" alt="Logo">
 		<svg>
   			<rect/>
