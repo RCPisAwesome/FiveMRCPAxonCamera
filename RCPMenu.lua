@@ -1,21 +1,40 @@
-empty = true
+cam = true
 allowthird = false
 allowthirdtoggle = true
+b = 0
 CreateThread( function()
 	while true do
 		Wait(0)
-		if (GetFollowPedCamViewMode() == 4 and empty) then
-        	SendNUIMessage({ShowUI = true})
-        	empty = false
-        elseif not (GetFollowPedCamViewMode() == 4) then
+		a = 1
+		if ((GetFollowPedCamViewMode() == 4) and (a == b) and (cam)) then
+			SendNUIMessage({ShowUI = true})
+        	cam = false
+        elseif not ((GetFollowPedCamViewMode() == 4) and (a == b)) then
+        	b = a
         	if (allowthird and allowthirdtoggle) then
-        		SendNUIMessage({ShowUI = true})
+				SendNUIMessage({ShowUI = true})
         		allowthirdtoggle = false
         	elseif not allowthird then
-        		SendNUIMessage({ShowUI = false})
+        		SendNUIMessage({HideUI = true})
         		allowthirdtoggle = true
         	end
-        	empty = true
+        	cam = true
+        end
+	end
+end)
+
+x = 0
+weapon = true
+CreateThread(function()
+	while true do
+		Wait(0)
+		w = GetSelectedPedWeapon(PlayerPedId())
+		if ((w ~= -1569615261) and (w == x) and (weapon)) then
+        	SendNUIMessage({weapon = true})
+        	weapon = false
+        elseif not (w == x) then
+        	x = w
+        	weapon = true
         end
 	end
 end)
